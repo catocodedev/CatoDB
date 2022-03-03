@@ -1,0 +1,15 @@
+body{
+    color:white;
+    background-color:rgb(36, 36, 36);
+}
+h1{
+    color:darkred;
+}
+a{
+    color:rgb(80, 173, 255);
+    text-decoration: none;
+}
+a :hover{
+    color:blue;
+    text-decoration: underline;
+}

@@ -3,6 +3,7 @@ const fs = require('fs');
 
 exports.fetch = async function (query) {
     return new Promise(function (resolve, reject) {
+        if(fs.existsSync("././data/"+query.table+".json")){
         fs.readFile("././data/"+query.table+".json", function (err, data) {
             if (err) reject(err);
             var results = JSON.parse(data);
@@ -28,5 +29,8 @@ exports.fetch = async function (query) {
             // }
             resolve(filtered)
         });
+    }else{
+        resolve({error: "INVALID TABLE"})    
+    }
     });
 }

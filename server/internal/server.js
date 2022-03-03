@@ -11,22 +11,30 @@ exports.run = async function (setting) {
             }catch(e){
                 return "invalid json"
             }
+            console.log('------------------------------------------------------')
+            console.log("INCOMMING =>")
             console.log(msg)
             if(msg.key != setting.server.key){
                 ws.send(JSON.stringify({error: "INVALID KEY"}))
+                console.log(" => OUTGOING")
                 return "INVALID KEY"
             }
             if(msg.act == "fetch"){
                 if(msg.query == undefined){
                     ws.send(JSON.stringify({error: "NO QUERY"}))
-                }else{
+                }
+                else if(msg.query.table == undefined){
+                    ws.send(JSON.stringify({error: "NO TABLE"}))
+                }
+                else{
                 dbman.fetch(msg.query).then(function(data){
                     console.log(data)
+                    console.log(" => OUTGOING")
                     ws.send(JSON.stringify(data));
                 });
             }
             }else if(msg.act == "connect"){
-                console.log('Conection!')
+                console.log('INCOMMING => Conection!')
             }
         });
     });
