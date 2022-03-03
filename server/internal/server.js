@@ -17,7 +17,6 @@ exports.run = async function (setting) {
             if(msg.key != setting.server.key){
                 ws.send(JSON.stringify({error: "INVALID KEY"}))
                 console.log(" => OUTGOING")
-                return "INVALID KEY"
             }
             if(msg.act == "fetch"){
                 if(msg.query == undefined){
