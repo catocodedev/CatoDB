@@ -11,8 +11,9 @@ document.getElementById("status").innerHTML = "Online!";
 ws.send(JSON.stringify({act: "connect",key: "CatoDB"}))
 }
 function que(){
-let tab = document.forms["form"]["table"].value;
-ws.send(JSON.stringify({act: "fetch",key: "CatoDB",query: {table: tab,row: "*"}}));
+let quey = document.forms["form"]["quey"].value;
+quey = JSON.parse(quey)
+ws.send(JSON.stringify({act: "fetch",key: "CatoDB",query: quey}));
 ws.onmessage = function (msg){
     var data = JSON.parse(msg.data);
     console.log(data)
