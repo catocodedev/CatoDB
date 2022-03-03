@@ -12,7 +12,12 @@ ws.send(JSON.stringify({act: "connect",key: "CatoDB"}))
 }
 function que(){
 let quey = document.forms["form"]["quey"].value;
+try{
 quey = JSON.parse(quey)
+}catch{
+    document.getElementById("data").innerHTML = "BAD JSON!";
+    return false
+}
 ws.send(JSON.stringify({act: "fetch",key: "CatoDB",query: quey}));
 ws.onmessage = function (msg){
     var data = JSON.parse(msg.data);
