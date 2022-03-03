@@ -1,0 +1,16 @@
+<head>
+    <script>
+        var ws = new WebSocket("ws://localhost:4020");
+        ws.onerror = function (err){
+    console.log("ERROR:" + err)
+}
+ws.onopen = function (con) {
+ws.send(JSON.stringify({act: "fetch",query: {"table": "test","column": "name"}}));
+
+}
+ws.onmessage = function (msg){
+var data = JSON.parse(msg.data);
+console.log(data);
+}
+    </script>
+</head>
