@@ -1,5 +1,6 @@
 {
     "server": {
-        "port": 4020
+        "port": 4020,
+        "key": "CatoDB"
     }
 }

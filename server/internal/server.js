@@ -11,6 +11,10 @@ exports.run = async function (setting) {
             }catch(e){
                 return "invalid json"
             }
+            if(msg.key != setting.server.key){
+                ws.send(JSON.stringify({error: "INVALID KEY"}))
+                return "INVALID KEY"
+            }
             if(msg.act == "fetch"){
                 dbman.fetch(msg.query).then(function(data){
                     ws.send(JSON.stringify(data));
