@@ -1,5 +1,6 @@
 const { WebSocketServer } = require('ws');
 const dbman = require('./dbman');
+const clients = new Map();
 
 exports.run = async function (setting) {
     const wss = new WebSocketServer({port:setting.server.port});
@@ -27,10 +28,12 @@ exports.run = async function (setting) {
                 }
                 else{
                 dbman.fetch(msg.query).then(function(data){
+                    console.log(`----------sending---------`)
                     console.log(data)
                     console.log(" => OUTGOING")
                     ws.send(JSON.stringify(data));
                 });
+                
             }
             }else if(msg.act == "connect"){
                 console.log('INCOMMING => Conection!')

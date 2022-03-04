@@ -7,26 +7,38 @@ exports.fetch = async function (query) {
         fs.readFile("././data/"+query.table+".json", function (err, data) {
             if (err) reject(err);
             var results = JSON.parse(data);
-            var filtered = results
+            console.log(results.schema)
+            var filtered = results.rows
             if(query.row == undefined || query.row == "*"){
                 // no effect
             }else{
-                if(query.row > -1 && query.row < filtered.rows.length){
+                if(query.row > -1 && query.row < filtered.length){
                     filtered = results.rows[query.row]
+                    console.log(filtered)
+                    if(query.column == undefined || query.column == "*"){
+                        console.log('NO COLUMN')
+                    }else{
+                        let colfil = [];
+                        for(var i in filtered) {
+                            colfil.push(filtered[i]);
+                        }
+                        console.log('------column data-------')
+                        console.log(query.column)
+                        console.log(results.schema.indexOf(query.column))
+                        console.log('------columns-------')
+                            if(colfil.hasOwnProperty(results.schema.indexOf(query.column))) {
+                        console.log(colfil[results.schema.indexOf(query.column)]);
+                        filtered = {"result": colfil[results.schema.indexOf(query.column)]}
+                        }else{
+                            resolve({error: "INVALID COLUMN QUERY"})
+                        }
+                    }
                 }else{
                     resolve({error: "INVALID ROW QUERY"})
                 }
             }
-            // if(query.column == undefined || query.column == "*"){
-            // resolve(results);
-            // }else{
-            //     for (key in results.rows) {
-            //         if(results.rows.hasOwnProperty(key)) {
-            //             console.log(key + " = " + results.rows[key]);
-            //         }
-            //       }
-            //     resolve(results);
-            // }
+            console.log(`----------filtered---------`)
+            console.log(filtered)
             resolve(filtered)
         });
     }else{
