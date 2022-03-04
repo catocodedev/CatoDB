@@ -37,6 +37,13 @@ exports.run = async function (setting) {
             }
             }else if(msg.act == "connect"){
                 console.log('INCOMMING => Conection!')
+            }else if(msg.act == "insert"){
+                dbman.insert(msg.query.table,msg.query.data).then(function(data){
+                    console.log(`----------sending---------`)
+                    console.log(data)
+                    console.log(" => OUTGOING")
+                    ws.send(JSON.stringify(data));
+                })
             }
         });
     });

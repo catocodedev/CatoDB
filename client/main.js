@@ -16,3 +16,16 @@ exports.fetch = async function(query,key){
     });
   });
 }
+exports.insert = async function(query,key){
+  await ws.on('open', function open() {
+  ws.send(JSON.stringify({act: "insert",key: key,query: query}))
+  ws.on('message', function message(msg) {
+    var data = JSON.parse(msg)
+    if(data.error == undefined){
+        console.log(data)
+    }else{
+    data = "ERROR: "+data.error
+    }
+  });
+});
+}

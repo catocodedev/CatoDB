@@ -46,3 +46,20 @@ exports.fetch = async function (query) {
     }
     });
 }
+exports.insert = async function(table,row){
+    if(fs.existsSync("././data/"+table+".json")){
+    fs.readFile("././data/"+table+".json", function (err, data) {
+        if (err){
+            return {error: "CAN'T EDIT TABLE"}
+        }
+        let old = JSON.parse(data)
+        console.log('--------------------')
+        console.log(old)
+        old['rows'].push(row);
+        fs.writeFile("././data/"+table+".json", JSON.stringify(old), 'utf-8', function (err){
+            if (err) return console.log(err);
+        })
+    })
+    }
+    return {result: 'TABLE INSERTED'}
+}
