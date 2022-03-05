@@ -44,6 +44,13 @@ exports.run = async function (setting) {
                     console.log(" => OUTGOING")
                     ws.send(JSON.stringify(data));
                 })
+            }else if(msg.act == "update"){
+                dbman.update(msg.query.row,msg.query.table,msg.query.data).then(function(data){
+                    console.log(`----------sending---------`)
+                    console.log(data)
+                    console.log(" => OUTGOING")
+                    ws.send(JSON.stringify(data));
+                })
             }
         });
     });

@@ -47,6 +47,7 @@ exports.fetch = async function (query) {
     });
 }
 exports.insert = async function(table,row){
+
     if(fs.existsSync("././data/"+table+".json")){
     fs.readFile("././data/"+table+".json", function (err, data) {
         if (err){
@@ -62,4 +63,24 @@ exports.insert = async function(table,row){
     })
     }
     return {result: 'TABLE INSERTED'}
+}
+exports.update = async function(row,table,dataa){
+    if(fs.existsSync("././data/"+table+".json")){
+    fs.readFile("././data/"+table+".json", function (err, data) {
+        if (err){
+            return {error: "CAN'T EDIT TABLE"}
+        }
+        let old = JSON.parse(data)
+        if(row > -1 && row < old.length){
+            return {error: "INVALID ROW QUERY"}
+        }
+        console.log('--------------------')
+        console.log(old)
+        old.rows[row] = dataa
+        fs.writeFile("././data/"+table+".json", JSON.stringify(old), 'utf-8', function (err){
+            if (err) return console.log(err);
+        })
+    })
+    }
+    return {result: 'TABLE UPDATED'}
 }
