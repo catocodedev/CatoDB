@@ -1,10 +1,6 @@
 const catodb = require('../main.js')
 
-main();
-async function main(){
-console.log('connected')
-await catodb.update({table: "test",row: 2,data:{
-    "name": "meowpur"
-    }
-},"CatoDB")
-}
+
+catodb.fetch('CatoDB',{table: "cats"})
+catodb.fetch('CatoDB',{table: "test"})
+catodb.fetch({table: "test", row: 1})
