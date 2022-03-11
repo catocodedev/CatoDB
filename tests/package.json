@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "catodb": "file:../client"
+  }
+}

@@ -1,5 +1,15 @@
 {
   "dependencies": {
     "ws": "^8.5.0"
-  }
+  },
+  "name": "catodb",
+  "version": "1.0.0",
+  "description": "a client for catodb",
+  "main": "main.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "CatoCodeDev",
+  "license": "ISC"
 }
