@@ -57,7 +57,7 @@ exports.insert = async function(table,row){
         })
     })
     }else{
-        reject({error: "TABLE DOESN'T EXSIT"})
+        resolve({error: "TABLE DOESN'T EXSIT"})
     }
 })
 }
@@ -66,11 +66,11 @@ exports.update = async function(row,table,dataa){
     if(fs.existsSync("././data/"+table+".json")){
     fs.readFile("././data/"+table+".json", function (err, data) {
         if (err){
-            reject({error: "CAN'T EDIT TABLE"})
+            resolve({error: "CAN'T EDIT TABLE"})
         }
         let old = JSON.parse(data)
         if(row > -1 && row < old.length){
-            reject({error: "INVALID ROW QUERY"})
+            resolve({error: "INVALID ROW QUERY"})
         }
         console.log('--------------------')
         console.log(old)
@@ -80,7 +80,7 @@ exports.update = async function(row,table,dataa){
         })
     })
     }else{
-        reject({error: "TABLE DOESN'T EXSIT"})
+        resolve({error: "TABLE DOESN'T EXSIT"})
     }
     resolve({result: 'TABLE UPDATED'})
 })
@@ -90,17 +90,17 @@ exports.create = async function(table,dataa){
     if(fs.existsSync("././data/"+table+".json")){
     fs.readFile("././data/"+table+".json", function (err, data) {
         if (err){
-            reject({error: "CAN'T EDIT TABLE"})
+            resolve({error: "CAN'T EDIT TABLE"})
         }
         let old = JSON.parse(data)
         if(row > -1 && row < old.length){
-            reject({error: "INVALID ROW QUERY"})
+            resolve({error: "INVALID ROW QUERY"})
         }
         console.log('--------------------')
         console.log(old)
         old.rows[row] = dataa
         fs.writeFile("././data/"+table+".json", JSON.stringify(old), 'utf-8', function (err){
-            if (err) return reject(err);
+            if (err) return resolve(err);
         })
     })
     }
