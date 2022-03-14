@@ -1,18 +1,25 @@
 const { WebSocket } = require('ws')
 
-const ws = new WebSocket('ws://localhost:4020')
-
-exports.open = async function(con){
-  return new Promise(function (resolve, reject) {
-  ws.on('open', async function open() {
-    resolve('READY!')
-  })
-  ws.on('error', async function err(){
-    reject('err')
-  })
-})
+class db{
+  constructor (con,key){
+    this.con = con
+    this.ws = new WebSocket(con);
+    this.key = key
+  }
+open = async function() {
+  var ws = this.ws
+  return new Promise((resolve, reject) => {
+    ws.on('open', () => {
+      resolve('READY!')
+    })
+    ws.on('error', () => {
+      reject('err')
+    })
+  })  
 }
-exports.fetch = async function(key,query){
+fetch = async function(query){
+  var ws = this.ws
+  var key = this.key
   return new Promise(function (resolve, reject) {
     ws.send(JSON.stringify({act: "fetch",key: key,query: query}))
     ws.on('message', async function message(msg) {
@@ -24,10 +31,12 @@ exports.fetch = async function(key,query){
     });
   })
 }
-exports.insert = async function(key,query){
+insert = async function(query){
+  var ws = this.ws
+  var key = this.key
   return new Promise(function (resolve, reject) {
-  ws.send(JSON.stringify({act: "insert",key: key,query: query}))
-  ws.on('message', async function message(msg) {
+    ws.send(JSON.stringify({act: "insert",key: key,query: query}))
+    ws.on('message', async function message(msg) {
     var data = JSON.parse(msg)
     if(data.error != undefined){
       reject(data = "ERROR: "+data.error)
@@ -36,10 +45,12 @@ exports.insert = async function(key,query){
   });
 })
 }
-exports.update = async function(key,query){
-  return new Promise(function (resolve, reject) {
-  ws.send(JSON.stringify({act: "update",key: key,query: query}))
-  ws.on('message', async function message(msg) {
+update = async function(query){
+  var ws = this.ws
+  var key = this.key
+  return new Promise (function (resolve, reject) {
+    ws.send(JSON.stringify({act: "update",key: key,query: query}))
+    ws.on('message', async function message(msg) {
     var data = JSON.parse(msg)
     if(data.error == undefined){
         resolve(data)
@@ -49,6 +60,8 @@ exports.update = async function(key,query){
   });
 })
 }
-exports.close = function (){
-  ws.close()
+close = function (){
+  this.ws.close()
 }
+}
+module.exports = db;
