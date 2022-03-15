@@ -65,12 +65,10 @@ exports.fetch = async function (query) {
                 list2 = list2.split(",")
                 // get rid of last comma
                 list2.pop()
-                console.log(list2)
                 let list3 = []
                 list2.forEach(element => {
                     list3.push(results.rows[element])
                 });
-                console.log(list3)
                 filtered = list3
                 resolve(filtered) 
         }else{
