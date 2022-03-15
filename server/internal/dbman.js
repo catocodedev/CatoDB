@@ -62,6 +62,9 @@ exports.fetch = async function (query) {
                         return i;
                     }
                 })
+                if(list2.length == 0 || list2 == undefined){
+                    filtered = {error: "NO ROWS FOUND"}
+                }else{
                 list2 = list2.split(",")
                 // get rid of last comma
                 list2.pop()
@@ -70,6 +73,7 @@ exports.fetch = async function (query) {
                     list3.push(results.rows[element])
                 });
                 filtered = list3
+            }
                 resolve(filtered) 
         }else{
             resolve({error: "INVALID FILTER QUERY"})
