@@ -1,4 +1,3 @@
-const { count } = require('console');
 const fs = require('fs');
 
 exports.fetch = async function (query) {
@@ -9,9 +8,21 @@ exports.fetch = async function (query) {
             var results = JSON.parse(data);
             // console.log(results.schema)
             var filtered = results.rows
+            if(!query.filters){
             if(query.row == undefined || query.row == "*"){
-                
-            }else{
+            // filter by column name
+            let list = [];
+            if(query.column){
+                filtered = results.rows.filter(function(row){
+                    list += row[query.column]+",";
+                })
+                list = list.split(",")
+                // get rid of last comma
+                list.pop()
+                filtered = list
+                }   
+                resolve(filtered)
+                }else{
                 if(query.row > -1 && query.row < filtered.length){
                     filtered = results.rows[query.row]
                     if(query.column == undefined || query.column == "*"){
@@ -31,11 +42,46 @@ exports.fetch = async function (query) {
                 }
             }
             resolve(filtered)
-        });
-    }else{
-        resolve({error: "INVALID TABLE"})    
+        }else{
+           // filter by column name
+           let list = [];
+           if(query.filters.column){
+               filtered = results.rows.filter(function(row){
+                   list += row[query.filters.column]+",";
+               })
+               list = list.split(",")
+               // get rid of last comma
+               list.pop()
+               // filter by value
+               let i = -1;
+               let list2 = [];
+                filtered = list.filter(function(row){
+                    i++;
+                    if(row == query.filters.value){
+                        list2 += i+",";
+                        return i;
+                    }
+                })
+                list2 = list2.split(",")
+                // get rid of last comma
+                list2.pop()
+                console.log(list2)
+                let list3 = []
+                list2.forEach(element => {
+                    list3.push(results.rows[element])
+                });
+                console.log(list3)
+                filtered = list3
+                resolve(filtered) 
+        }else{
+            resolve({error: "INVALID FILTER QUERY"})
+        }
     }
     });
+}else{
+    resolve({error: "INVALID TABLE"})    
+}
+});
 }
 exports.insert = async function(table,row){
     return new Promise(function (resolve, reject) {
