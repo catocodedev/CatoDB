@@ -1,6 +1,5 @@
-# CatoDB
-A json based DB
-## Using client
+# CatoDB Client
+## Usage
 ### Step 1
 `npm i catodb`
 ### Step 2
@@ -27,4 +26,3 @@ db.close
 }
 ```
 ### Done!
-## Using Server
