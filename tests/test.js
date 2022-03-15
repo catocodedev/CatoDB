@@ -5,8 +5,10 @@ main()
 async function main(){
 await db.open()
 try{
-console.log(await db.fetch({table: "test", filters: {column:"info", value:"client"}}))
-console.log(await db.fetch({table: "test",column:"name"}))
+console.log(await db.create({table:'meow',schema:['name','type'],data:{'name':'meow','type':'cat'}}))
+console.log(await db.remove({row:0,table:'test'}))
+console.log(await db.fetch({table: "auth", filters: {column:"user", value:"Admin"}}))
+console.log(await db.fetch({table: "auth",column:"pass"}))
 }catch(e){
 console.log(e)
 }

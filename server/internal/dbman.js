@@ -1,4 +1,5 @@
 const fs = require('fs');
+const { resolve } = require('path');
 
 exports.fetch = async function (query) {
     return new Promise(function (resolve, reject) {
@@ -133,7 +134,7 @@ exports.update = async function(row,table,dataa){
     resolve({result: 'TABLE UPDATED'})
 })
 }
-exports.create = async function(table,dataa){
+exports.remove = async function(row,table){
     return new Promise(function (resolve, reject) {
     if(fs.existsSync("././data/"+table+".json")){
     fs.readFile("././data/"+table+".json", function (err, data) {
@@ -146,12 +147,30 @@ exports.create = async function(table,dataa){
         }
         console.log('--------------------')
         console.log(old)
-        old.rows[row] = dataa
+        // remove row
+        old.rows.splice(row,1);
         fs.writeFile("././data/"+table+".json", JSON.stringify(old), 'utf-8', function (err){
-            if (err) return resolve(err);
+            if (err) return reject(err);
         })
     })
+    }else{
+        resolve({error: "TABLE DOESN'T EXSIT"})
     }
-    resolve({result: 'TABLE UPDATED'})
+    resolve({result: 'ROW REMOVED'})
+})
+}
+exports.create = async function(table,schema,dataa){
+    if(dataa == undefined){
+        resolve({error: "NO DATA"})
+    }
+    return new Promise(function (resolve, reject) {
+    if(fs.existsSync("././data/"+table+".json")){
+        resolve({error: "TABLE ALREADY EXSITS"})
+    }else{
+        fs.writeFile("././data/"+table+".json", JSON.stringify({schema: schema,rows:[dataa]}), 'utf-8', function (err){
+            if (err) resolve({error: "CAN'T CREATE TABLE"})
+        })
+    }
+    resolve({result: 'TABLE CREATED'})
 })
 }

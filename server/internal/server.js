@@ -46,6 +46,17 @@ exports.run = async function (setting) {
                     ws.send(JSON.stringify(data));
                 });
             }
+            else if(msg.act == "create"){
+                await dbman.create(msg.query.table,msg.query.schema,msg.query.data).then(data => {
+                    console.log(data)
+                    ws.send(JSON.stringify(data));
+                });
+            }else if(msg.act == "remove"){
+                await dbman.remove(msg.query.row,msg.query.table).then(data => {
+                    console.log(data)
+                    ws.send(JSON.stringify(data));
+                });
+            }
             console.log(" => OUTGOING")
         }
     }catch(e){
