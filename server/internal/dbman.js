@@ -71,7 +71,7 @@ exports.fetch = async function (query) {
                 list2.pop()
                 let list3 = []
                 list2.forEach(element => {
-                    list3.push(results.rows[element])
+                    list3.push(JSON.stringify({row:i,data:results.rows[element]}))
                 });
                 filtered = list3
             }
