@@ -3,7 +3,7 @@ const { WebSocket } = require('ws')
 class db{
   constructor (con,key){
     this.con = con
-    this.ws = new WebSocket(con);
+    this.ws = new WebSocket("ws://"+con);
     this.key = key
   }
 open = async function() {

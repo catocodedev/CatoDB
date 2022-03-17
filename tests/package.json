@@ -1,5 +1,5 @@
 {
   "dependencies": {
-    "catodb": "file:../client"
+    "catodb": "file:../client/nodejs"
   }
 }

@@ -28,7 +28,7 @@ exports.run = async function (setting) {
                 }
                 else{
                     console.log(`----------sending---------`)
-                    await dbman.fetch(msg.query).then(data => {
+                    await dbman.fetch(msg.query,setting).then(data => {
                     console.log(data)
                     ws.send(JSON.stringify(data));
                 });
@@ -36,23 +36,23 @@ exports.run = async function (setting) {
             }else if(msg.act == "connect"){
                 console.log('INCOMMING => Conection!')
             }else if(msg.act == "insert"){
-                await dbman.insert(msg.query.table,msg.query.data).then(data => {
+                await dbman.insert(msg.query.table,msg.query.data,setting).then(data => {
                     console.log(data)
                     ws.send(JSON.stringify(data));
                 });
             }else if(msg.act == "update"){
-                await dbman.update(msg.query.row,msg.query.table,msg.query.data).then(data => {
+                await dbman.update(msg.query.row,msg.query.table,msg.query.data,setting).then(data => {
                     console.log(data)
                     ws.send(JSON.stringify(data));
                 });
             }
             else if(msg.act == "create"){
-                await dbman.create(msg.query.table,msg.query.schema,msg.query.data).then(data => {
+                await dbman.create(msg.query.table,msg.query.schema,msg.query.data,setting).then(data => {
                     console.log(data)
                     ws.send(JSON.stringify(data));
                 });
             }else if(msg.act == "remove"){
-                await dbman.remove(msg.query.row,msg.query.table).then(data => {
+                await dbman.remove(msg.query.row,msg.query.table,setting).then(data => {
                     console.log(data)
                     ws.send(JSON.stringify(data));
                 });

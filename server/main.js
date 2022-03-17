@@ -4,5 +4,6 @@ const server = require('./internal/server');
 main();
 async function main(){
     const setting = await settings.get();
-    server.run(setting);
+    console.log(setting)
+    await server.run(setting);
 }

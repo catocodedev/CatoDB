@@ -1,10 +1,11 @@
 const fs = require('fs');
 const { resolve } = require('path');
 
-exports.fetch = async function (query) {
+exports.fetch = async function (query,settings) {
+    console.log("././"+settings.server.path+"/"+query.table+".json")
     return new Promise(function (resolve, reject) {
-        if(fs.existsSync("././data/"+query.table+".json")){
-        fs.readFile("././data/"+query.table+".json", function (err, data) {
+        if(fs.existsSync("././"+settings.server.path+"/"+query.table+".json")){
+        fs.readFile("././"+settings.server.path+"/"+query.table+".json", function (err, data) {
             if (err) reject(err);
             var results = JSON.parse(data);
             // console.log(results.schema)
@@ -86,10 +87,10 @@ exports.fetch = async function (query) {
 }
 });
 }
-exports.insert = async function(table,row){
+exports.insert = async function(table,row,settings){
     return new Promise(function (resolve, reject) {
-    if(fs.existsSync("././data/"+table+".json")){
-    fs.readFile("././data/"+table+".json", function (err, data) {
+    if(fs.existsSync("././"+settings.server.path+"/"+table+".json")){
+    fs.readFile("././"+settings.server.path+"/"+table+".json", function (err, data) {
         if (err){
             reject({error: "CAN'T EDIT TABLE"})
         }
@@ -97,7 +98,7 @@ exports.insert = async function(table,row){
         console.log('--------------------')
         console.log(old)
         old['rows'].push(row);
-        fs.writeFile("././data/"+table+".json", JSON.stringify(old), 'utf-8', function (err){
+        fs.writeFile("././"+settings.server.path+"/"+table+".json", JSON.stringify(old), 'utf-8', function (err){
             if (err){
                 reject(err)
             }else{
@@ -110,10 +111,10 @@ exports.insert = async function(table,row){
     }
 })
 }
-exports.update = async function(row,table,dataa){
+exports.update = async function(row,table,dataa,settings){
     return new Promise(function (resolve, reject) {
-    if(fs.existsSync("././data/"+table+".json")){
-    fs.readFile("././data/"+table+".json", function (err, data) {
+    if(fs.existsSync("././"+settings.server.path+"/"+table+".json")){
+    fs.readFile("././"+settings.server.path+"/"+table+".json", function (err, data) {
         if (err){
             resolve({error: "CAN'T EDIT TABLE"})
         }
@@ -134,7 +135,7 @@ exports.update = async function(row,table,dataa){
     resolve({result: 'TABLE UPDATED'})
 })
 }
-exports.remove = async function(row,table){
+exports.remove = async function(row,table,settings){
     return new Promise(function (resolve, reject) {
     if(fs.existsSync("././data/"+table+".json")){
     fs.readFile("././data/"+table+".json", function (err, data) {
@@ -159,15 +160,15 @@ exports.remove = async function(row,table){
     resolve({result: 'ROW REMOVED'})
 })
 }
-exports.create = async function(table,schema,dataa){
+exports.create = async function(table,schema,dataa,settings){
     if(dataa == undefined){
         resolve({error: "NO DATA"})
     }
     return new Promise(function (resolve, reject) {
-    if(fs.existsSync("././data/"+table+".json")){
+    if(fs.existsSync("././"+settings.server.path+"/"+table+".json")){
         resolve({error: "TABLE ALREADY EXSITS"})
     }else{
-        fs.writeFile("././data/"+table+".json", JSON.stringify({schema: schema,rows:[dataa]}), 'utf-8', function (err){
+        fs.writeFile("././"+settings.server.path+"/"+table+".json", JSON.stringify({schema: schema,rows:[dataa]}), 'utf-8', function (err){
             if (err) resolve({error: "CAN'T CREATE TABLE"})
         })
     }

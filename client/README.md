@@ -1,20 +1,11 @@
 # CatoDB Client
-## Usage
+## NODE JS
 ### Step 1
-`npm i catodb`
-### Step 2
-create a new js file and requrie the module
-```
-const catodb = require('catodb')
-```
-### Step 3
-Add your DB connection the fisrt peram being the DB connection and the second one being the key
-```
-var db = new catodb('ws://localhost:4020', 'CatoDB')
-```
-### Step 4
+`npm i catodb`<br/>
 Create a main async funtion and connect to your DB
 ```
+const catodb = require('catodb')
+var db = new catodb('localhost:4020', 'CatoDB')
 main()
 async function main(){
     try{
@@ -25,4 +16,4 @@ await db.open()
 db.close
 }
 ```
-### Done!
+## more langs soon
