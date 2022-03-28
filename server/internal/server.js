@@ -57,6 +57,15 @@ exports.run = async function (setting) {
                     ws.send(JSON.stringify(data));
                 });
             }
+            else if(msg.act == "insert"){
+                console.log('INCOMMING => insert!')
+                await dbman.insert(msg.query.table,msg.query.data,setting).then(data => {
+                    console.log(data)
+                    ws.send(JSON.stringify(data));
+                });
+            }else{
+                ws.send(JSON.stringify({error: "NO/INVALID ACT"}))
+            }
             console.log(" => OUTGOING")
         }
     }catch(e){

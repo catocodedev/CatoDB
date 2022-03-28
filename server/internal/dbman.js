@@ -6,7 +6,7 @@ exports.fetch = async function (query,settings) {
     return new Promise(function (resolve, reject) {
         if(fs.existsSync("././"+settings.server.path+"/"+query.table+".json")){
         fs.readFile("././"+settings.server.path+"/"+query.table+".json", function (err, data) {
-            if (err) reject(err);
+            if (err) resolve(err);
             var results = JSON.parse(data);
             // console.log(results.schema)
             var filtered = results.rows
@@ -54,6 +54,10 @@ exports.fetch = async function (query,settings) {
                list = list.split(",")
                // get rid of last comma
                list.pop()
+               filtered = list
+               console.log(query.filters.value)
+               if(query.filters.value != undefined || query.filters.value != "*"){
+                console.log("FILTERING")
                // filter by value
                let i = -1;
                let list2 = [];
@@ -76,6 +80,9 @@ exports.fetch = async function (query,settings) {
                 });
                 filtered = list3
             }
+        }else{
+            console.log("NOT FILTERING")
+        }
                 resolve(filtered) 
         }else{
             resolve({error: "INVALID FILTER QUERY"})
@@ -92,7 +99,7 @@ exports.insert = async function(table,row,settings){
     if(fs.existsSync("././"+settings.server.path+"/"+table+".json")){
     fs.readFile("././"+settings.server.path+"/"+table+".json", function (err, data) {
         if (err){
-            reject({error: "CAN'T EDIT TABLE"})
+            resolve({error: "CAN'T EDIT TABLE"})
         }
         let old = JSON.parse(data)
         console.log('--------------------')
@@ -100,7 +107,7 @@ exports.insert = async function(table,row,settings){
         old['rows'].push(row);
         fs.writeFile("././"+settings.server.path+"/"+table+".json", JSON.stringify(old), 'utf-8', function (err){
             if (err){
-                reject(err)
+                resolve(err)
             }else{
                 resolve({result: 'ROW INSERTED'})
             }
@@ -126,7 +133,7 @@ exports.update = async function(row,table,dataa,settings){
         console.log(old)
         old.rows[row] = dataa
         fs.writeFile("././data/"+table+".json", JSON.stringify(old), 'utf-8', function (err){
-            if (err) return reject(err);
+            if (err) return resolve(err);
         })
     })
     }else{
@@ -151,7 +158,7 @@ exports.remove = async function(row,table,settings){
         // remove row
         old.rows.splice(row,1);
         fs.writeFile("././data/"+table+".json", JSON.stringify(old), 'utf-8', function (err){
-            if (err) return reject(err);
+            if (err) return resolve(err);
         })
     })
     }else{
