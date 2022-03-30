@@ -1,12 +1,24 @@
 const { WebSocketServer } = require('ws');
 const dbman = require('./dbman');
 const clients = new Map();
+const fs = require('fs');
 
 var key = undefined
-
+async function getDBs(loc){
+    var loc = loc
+    return new Promise(async function(resolve, reject) {
+      fs.readFile(loc+"/dbs.json", function(err, data) {
+        if (err) reject(err);
+        var DBs = JSON.parse(data);
+        resolve(DBs);
+      });
+    });
+  }
 exports.run = async function (setting) {
+    console.log(setting.server.DBs)
+    var DBs = await getDBs(setting.server.DBs);
+    console.log(DBs)
     const wss = new WebSocketServer({port:setting.server.port});
-    key = setting.server.key
     wss.on('connection', async function connection(ws) {
        ws.on('message', async function incoming(message) {
             try{
@@ -14,6 +26,19 @@ exports.run = async function (setting) {
             console.log('------------------------------------------------------')
             console.log("INCOMMING =>")
             console.log(msg)
+            console.log('------------------------------------------------------')
+            // find the table and the key using DBs
+            let table = undefined
+            let key = undefined
+            let path = undefined
+            for(let i = 0; i < DBs.length; i++){
+                if(DBs[i].name == msg.table){
+                    table = DBs[i].table
+                    key = DBs[i].key
+                    path = DBs[i].path
+                }
+            }
+            console.log(table+" "+ key)
             if(msg.key.toString() != key){
                 ws.send(JSON.stringify({error: "INVALID KEY"}))
                 console.log("INVALID KEY")

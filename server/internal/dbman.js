@@ -1,11 +1,11 @@
 const fs = require('fs');
 const { resolve } = require('path');
 
-exports.fetch = async function (query,settings) {
+exports.fetch = async function (query,table,settings) {
     console.log("././"+settings.server.path+"/"+query.table+".json")
     return new Promise(function (resolve, reject) {
-        if(fs.existsSync("././"+settings.server.path+"/"+query.table+".json")){
-        fs.readFile("././"+settings.server.path+"/"+query.table+".json", function (err, data) {
+        if(fs.existsSync(table+".json")){
+        fs.readFile(table+".json", function (err, data) {
             if (err) resolve(err);
             var results = JSON.parse(data);
             // console.log(results.schema)
